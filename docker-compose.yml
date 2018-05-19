@@ -1,0 +1,8 @@
+oracle:
+    image: ps-oracle:latest
+    ports:
+      - 1521:1521
+      - 5500:5500
+    environment:
+      ORACLE_USER: psheldon,sample
+      ORACLE_USER_PASSWORD:
