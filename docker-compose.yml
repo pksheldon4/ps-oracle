@@ -1,5 +1,5 @@
 oracle:
-    image: ps-oracle:latest
+    image: ps-oracle:12.2.0.1-ee
     ports:
       - 1521:1521
       - 5500:5500

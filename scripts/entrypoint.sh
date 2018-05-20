@@ -20,7 +20,7 @@ EOF
 }
 ############# Create User ################
 function createUser {
-  echo "############# Create User ################"
+  echo "############# Create User(s) #############"
   echo $ORACLE_USER
   if [ "$ORACLE_USER_PASSWORD" == "" ]; then
      ORACLE_USER_PASSWORD=$ORACLE_USER
@@ -43,7 +43,6 @@ EOF
 
   echo "### connect as user ["${users[0]}"]"
   sqlplus ${users[0]}/${passwords[0]}@//localhost:1521/$ORACLE_PDB <<EOF
-  SELECT * FROM USER_TABLES;
 EOF
 
 }
@@ -58,8 +57,6 @@ EOF
 }
 
 ############# MAIN ################
-echo "########################################"
-echo "############# Create Users #############"
 echo "########################################"
 # Set SIGTERM handler
 trap _term SIGTERM
@@ -83,9 +80,12 @@ if [ "$ORACLE_USER" != "" ]; then
   createUser;
 fi;
 
-echo "###########################"
-echo "DB USERS ARE  READY TO USE!"
-echo "###########################"
+# Execute custom provided startup scripts
+$ORACLE_BASE/$USER_SCRIPTS_FILE $ORACLE_BASE/scripts/sql/
+
+echo "#############################"
+echo "DB STARTED AND READY TO USE!"
+echo "#############################"
 tail -f $ORACLE_BASE/diag/rdbms/*/*/trace/alert*.log &
 childPID=$!
 wait $childPID
