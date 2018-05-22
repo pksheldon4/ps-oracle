@@ -1,6 +1,6 @@
 # Pull base image
 # ---------------
-FROM oracle/database:12.2.0.1-ee
+FROM ps-oracle/database:12.2.0.1-se2
 
 # Maintainer
 # ----------
