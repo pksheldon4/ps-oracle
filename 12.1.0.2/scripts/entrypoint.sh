@@ -86,6 +86,9 @@ $ORACLE_BASE/$USER_SCRIPTS_FILE $ORACLE_BASE/scripts/sql/
 echo "#############################"
 echo "DB STARTED AND READY TO USE!"
 echo "#############################"
-tail -f $ORACLE_BASE/diag/rdbms/*/*/trace/alert*.log &
-childPID=$!
-wait $childPID
+echo "TEST: " $TEST
+if ["$TEST" == ""]; then
+  tail -f $ORACLE_BASE/diag/rdbms/*/*/trace/alert*.log &
+  childPID=$!
+  wait $childPID
+fi;

@@ -91,13 +91,14 @@ else
   DOCKEROPS="--shm-size=1G $DOCKEROPS";
 fi
 
-export FROM_IMAGE_NAME="ps-oracle/database:$VERSION-$EDITION"
 # Oracle Database Image Name
-export IMAGE_NAME="ps-oracle:$VERSION-$EDITION"
+export IMAGE_NAME="pksheldon4/ps-oracle:$VERSION-$EDITION"
+
+cd $VERSION
 
 BUILD_START=$(date '+%s')
 echo "Creating Image: " ${IMAGE_NAME}
-docker build --force-rm=true --no-cache=true $DOCKEROPS -t $IMAGE_NAME -f $VERSION/Dockerfile.$EDITION . || {
+docker build --force-rm=true --no-cache=true $DOCKEROPS -t $IMAGE_NAME -f Dockerfile.$EDITION . || {
   echo ""
   echo "ERROR: Oracle Database Docker Image was NOT successfully created."
   echo "ERROR: Check the output and correct any reported problems with the docker build operation."

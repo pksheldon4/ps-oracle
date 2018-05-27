@@ -1,6 +1,6 @@
 # Pull base image
 # ---------------
-FROM ps-oracle/database:12.1.0.2-ee
+FROM pksheldon4/oracle-base:12.1.0.2-ee
 
 # Maintainer
 # ----------
