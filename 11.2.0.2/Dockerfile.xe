@@ -9,7 +9,6 @@ MAINTAINER Preston Sheldon <psheldon@pivotal.io>
 ENV ORACLE_PWD=4dminPass
 
 COPY scripts/*.sh $ORACLE_BASE/
-COPY sql/* $ORACLE_BASE/scripts/sql/
 
 # Builds Oracle DB inside of this image
 RUN $ORACLE_BASE/runOracle.sh

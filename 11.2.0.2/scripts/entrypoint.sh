@@ -20,7 +20,7 @@ EOF
 }
 ############# Create User ################
 function createUser {
-  echo "############# Create User(s) #############"
+  echo "############# Create User(s) XE #############"
   echo $ORACLE_USER
   if [ "$ORACLE_USER_PASSWORD" == "" ]; then
      ORACLE_USER_PASSWORD=$ORACLE_USER
@@ -49,12 +49,11 @@ EOF
 
 ############# Start DB ################
 function startDB {
-   echo "############# Start DB ################"
+   echo "############# Start XE DB ################"
    /etc/init.d/oracle-xe start | grep -qc "Oracle Database 11g Express Edition is not configured"
 }
 
 ############# MAIN ################
-echo "########################################"
 # Set SIGTERM handler
 trap _term SIGTERM
 
@@ -72,15 +71,9 @@ if [ "$ORACLE_USER" != "" ]; then
   createUser;
 fi;
 
-# Execute custom provided startup scripts
-$ORACLE_BASE/$USER_SCRIPTS_FILE $ORACLE_BASE/scripts/sql/
-
 echo "#############################"
-echo "DB STARTED AND READY TO USE!"
+echo "XE DB STARTED AND READY TO USE!"
 echo "#############################"
-echo "TEST: " $TEST
-if ["$TEST" == ""]; then
-  tail -f $ORACLE_BASE/diag/rdbms/*/*/trace/alert*.log &
-  childPID=$!
-  wait $childPID
-fi;
+tail -f $ORACLE_BASE/diag/rdbms/*/*/trace/alert*.log &
+childPID=$!
+wait $childPID

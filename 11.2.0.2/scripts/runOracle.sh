@@ -198,9 +198,9 @@ fi;
 # Check whether database is up and running
 $ORACLE_BASE/$CHECK_DB_FILE
 if [ $? -eq 0 ]; then
-  echo "##################################################"
-  echo "DATABASE IS READY TO USE!"
-  echo "##################################################"
+  echo "#############################"
+  echo "XE DATABASE IS READY TO USE!"
+  echo "#############################"
 
   # Execute custom provided startup scripts
   runUserScripts $ORACLE_BASE/scripts/startup
@@ -208,7 +208,7 @@ if [ $? -eq 0 ]; then
 else
   echo "#####################################"
   echo "########### E R R O R ###############"
-  echo "DATABASE SETUP WAS NOT SUCCESSFUL!"
+  echo "XE DATABASE SETUP WAS NOT SUCCESSFUL!"
   echo "Please check output for further info!"
   echo "########### E R R O R ###############"
   echo "#####################################"

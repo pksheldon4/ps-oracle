@@ -1,6 +1,6 @@
 oracle:
-    # image: pksheldon4/ps-oracle:11.2.0.2-xe
-    image: pksheldon4/ps-oracle:12.2.0.1-ee
+    image: pksheldon4/ps-oracle:11.2.0.2-xe
+    #image: pksheldon4/ps-oracle:12.2.0.1-ee
     shm_size: 1g
     ports:
       - 1521:1521
