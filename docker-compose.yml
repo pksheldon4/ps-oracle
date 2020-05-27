@@ -1,10 +1,10 @@
 oracle:
     image: pksheldon4/ps-oracle:18.4.0-xe
-    shm_size: 1g
     ports:
       - 1521:1521
       - 5500:5500
     environment:
-      ORACLE_USER: sampledb
-      ORACLE_USER_PASSWORD: sampledb
+      ORACLE_USER: ichabod,psheldon
+      ORACLE_USER_PASSWORD: ichabod,psheldon
+      ORACLE_SCHEMAS: TBMSUP,FROBDB,AODB
       ORACLE_PWD: 4dminPass

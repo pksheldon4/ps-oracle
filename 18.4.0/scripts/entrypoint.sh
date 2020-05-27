@@ -1,5 +1,4 @@
 #!/bin/bash
-set +x
 ########### SIGTERM handler ############
 function _term() {
    echo "Stopping container."
@@ -8,7 +7,6 @@ function _term() {
    shutdown immediate;
 EOF
 /etc/init.d/oracle-xe-18c stop
-# systemctl stop oracle-xe-18c 
 }
 
 ########### SIGKILL handler ############
@@ -17,7 +15,6 @@ function _kill() {
    sqlplus / as sysdba <<EOF
    shutdown abort;
 EOF
-  #systemctl stop oracle-xe-18c
   /etc/init.d/oracle-xe-18c stop 
 }
 ############# Create User ################
@@ -30,6 +27,18 @@ function createUser {
 
   OLDIFS=$IFS
   IFS=',':
+
+## Schemas are oracle users with no login permissions.
+  read -ra schemas <<< "$ORACLE_SCHEMAS"
+  for((i=0; i< ${#schemas[@]};++i));
+  do
+   echo "#### Creating schema ["${schemas[i]}"]"
+   sqlplus sys/$ORACLE_PWD@//localhost:1521/$ORACLE_PDB as sysdba <<EOF
+   create user ${schemas[i]} no authentication;
+   GRANT UNLIMITED TABLESPACE TO ${schemas[i]};
+EOF
+  done
+
   read -ra users <<< "$ORACLE_USER"
   read -ra passwords <<< "$ORACLE_USER_PASSWORD"
   for((i=0; i< ${#users[@]};++i));
@@ -39,6 +48,14 @@ function createUser {
    sqlplus sys/$ORACLE_PWD@//localhost:1521/$ORACLE_PDB as sysdba <<EOF
    GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO ${users[i]} IDENTIFIED BY ${passwords[i]};
    GRANT CREATE SESSION TO ${users[i]};
+   GRANT CREATE ANY TABLE TO ${users[i]};
+   GRANT ALTER ANY TABLE TO ${users[i]};
+   GRANT DROP ANY TABLE TO ${users[i]};
+   GRANT SELECT ANY TABLE TO ${users[i]};
+   GRANT INSERT ANY TABLE TO ${users[i]};
+   GRANT UPDATE ANY TABLE TO ${users[i]};
+   GRANT DELETE ANY TABLE TO ${users[i]};
+   GRANT CREATE ANY INDEX TO ${users[i]};
 EOF
 
   done
@@ -53,7 +70,6 @@ EOF
 ############# Start DB ################
 function startDB {
    echo "############# Start DB ################"
-   #systemctl start oracle-xe-18c
    /etc/init.d/oracle-xe-18c start | grep -qc "Oracle Database is not configured"
    sqlplus / as sysdba <<EOF
 EOF
