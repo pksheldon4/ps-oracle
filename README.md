@@ -1,25 +1,28 @@
 # ps-oracle
 
-Extend the standard Oracle Docker image to include pre-creating the Database inside the Image. Details for the standard image can be found here [Oracle Database Docker Image](https://github.com/oracle/docker-images/tree/master/OracleDatabase/SingleInstance).
+Extend the standard Oracle Docker image to include pre-creating the Database inside the image. Details for the standard image can be found here [Oracle Database Docker Image](https://github.com/oracle/docker-images/tree/master/OracleDatabase/SingleInstance).
 
-The Oracle image allows the user to create a Docker Image using various versions of Oracle, this project expects to find a local version of the Docker Image named ```oracle/database:12.2.0.1-ee```
+It is expected that a local version of the Docker image named `oracle/database:18.4.0-xe` has already been created, following the instructions in the link above.
 
-This is done by executing the following command ```./buildDockerImage.sh -v 12.2.0.1 -e -i```
+The purpose of this project is to reduce the time it takes to start up an Oracle container which can be used for testing.  This is done by executing the base `runOracle.sh` script during image creation and adding a new `entrypoint.sh` script to create the users/schemas during startup.
 
-Before using this project, it is necessary to follow the Oracle instructions to create the above image with one modification.
-
-The following line have be commented out in ```Dockerfile.$VERSION```
-```
-#VOLUME ["$ORACLE_BASE/oradata"]
-```
-And the last few lines in each verion's runOracle.sh which tail the logs.
-```
-# echo "The following output is now a tail of the alert.log:"
-# tail -f $ORACLE_BASE/diag/rdbms/*/*/trace/alert*.log &
-# childPID=$!
-# wait $childPID
+Dockerfile.xe
 ```
 
-My fork, including this change, can be found [here](https://github.com/pksheldon4/oracle-docker-images/tree/master/OracleDatabase/SingleInstance).
+# Builds Oracle DB inside of this image
+RUN $ORACLE_BASE/runOracle.sh
 
-The purpose of this Docker image is to have the Database fully contained in the image so the VOLUME isn't necessary.
+# Starts Oracle DB and creates users based on environment variables
+CMD $ORACLE_BASE/entrypoint.sh
+```
+
+This image is built by executing the following command `./buildDockerImage.sh`
+
+The database can be started using the included `docker-compose.yml` file which can be customized for your needs. Below is a description of the available environment variables.
+1. ORACLE_USER - a comma-separated list of users to be created. These users will have access to do most database functions across all schemas.
+1. ORACLE_USER_PASSWORD - a comma-separated list of passwords, positionally matched to the users. Defaults to the user names.
+1. ORACLE_SCHEMAS - a comma-separated list of schemas to be created without login capability and only TABLESPACE access granted.
+1. ORACLE_PWD - The password used for the SYS and SYSTEM users when the image was created. (Currently hardcoded in the Dockerfile.xe)
+
+
+NOTE: This Docker build/image should not be used other than for testing purposes as the system password is included in this project and built into the image and users may be granted more privileges that would be valid in a real-world scenario.

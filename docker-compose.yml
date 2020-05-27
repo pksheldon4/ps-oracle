@@ -4,7 +4,7 @@ oracle:
       - 1521:1521
       - 5500:5500
     environment:
-      ORACLE_USER: ichabod,psheldon
-      ORACLE_USER_PASSWORD: ichabod,psheldon
-      ORACLE_SCHEMAS: TBMSUP,FROBDB,AODB
+      ORACLE_USER: test
+      ORACLE_USER_PASSWORD: test
+      ORACLE_SCHEMAS: SCHEMA_A,SCHEMA_B
       ORACLE_PWD: 4dminPass

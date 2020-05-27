@@ -6,7 +6,8 @@ FROM oracle/database:18.4.0-xe
 # ----------
 MAINTAINER Preston Sheldon <pksiv@hotmail.com>
 
-ENV ORACLE_PWD=4dminPass
+# TODO: Move this outside of this file
+ENV ORACLE_PWD=4dminPass 
 
 COPY scripts/*.sh $ORACLE_BASE/
 COPY sql/* $ORACLE_BASE/scripts/sql/

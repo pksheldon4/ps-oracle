@@ -8,22 +8,8 @@
 usage() {
   cat << EOF
 
-Usage: buildDockerImage.sh -v [version] [-e | -s | -x] [-i] [-o] [Docker build option]
+Usage: buildDockerImage.sh 
 Builds a Docker Image for Oracle Database.
-
-Parameters:
-   -v: version to build
-       Choose one of: $(for i in $(ls -d */); do echo -n "${i%%/}  "; done)
-   -e: creates image based on 'Enterprise Edition'
-   -s: creates image based on 'Standard Edition 2'
-   -x: creates image based on 'Express Edition'
-   -o: passes on Docker build option
-
-* select one edition only: -e, -s, or -x
-
-LICENSE UPL 1.0
-
-Copyright (c) 2014-2017 Oracle and/or its affiliates. All rights reserved.
 
 EOF
   exit 0
@@ -38,54 +24,11 @@ if [ "$#" -eq 0 ]; then
 fi
 
 # Parameters
-ENTERPRISE=0
-STANDARD=0
-EXPRESS=0
+EXPRESS=1
 VERSION="18.4.0"
-SKIPMD5=0
+SKIPMD5=1
 DOCKEROPS=""
-
-while getopts "hesxiv:o:" optname; do
-  case "$optname" in
-    "h")
-      usage
-      ;;
-    "e")
-      ENTERPRISE=1
-      ;;
-    "s")
-      STANDARD=1
-      ;;
-    "x")
-      EXPRESS=1
-      ;;
-    "v")
-      VERSION="$OPTARG"
-      ;;
-    "o")
-      DOCKEROPS="$OPTARG"
-      ;;
-    "?")
-      usage;
-      exit 1;
-      ;;
-    *)
-    # Should not occur
-      echo "Unknown error while processing options inside buildDockerImage.sh"
-      ;;
-  esac
-done
-
-# Which Edition should be used?
-if [ $((ENTERPRISE + STANDARD + EXPRESS)) -gt 1 ]; then
-  usage
-elif [ $ENTERPRISE -eq 1 ]; then
-  EDITION="ee"
-elif [ $STANDARD -eq 1 ]; then
-  EDITION="se2"
-else
-  EDITION="xe";
-fi
+EDITION="xe";
 
 # Oracle Database Image Name
 export IMAGE_NAME="pksheldon4/ps-oracle:$VERSION-$EDITION"
