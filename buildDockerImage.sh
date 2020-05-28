@@ -19,9 +19,21 @@ EOF
 #### MAIN ####
 ##############
 
-if [ "$#" -eq 0 ]; then
-  usage;
-fi
+while getopts "h" optname; do
+  case "$optname" in
+    "h")
+      usage
+      ;;
+    "?")
+      usage;
+      exit 1;
+      ;;
+    *)
+    # Should not occur
+      echo "Unknown error while processing options inside buildDockerImage.sh"
+      ;;
+  esac
+done
 
 # Parameters
 EXPRESS=1
