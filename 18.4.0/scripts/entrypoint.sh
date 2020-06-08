@@ -56,6 +56,9 @@ EOF
    GRANT UPDATE ANY TABLE TO ${users[i]};
    GRANT DELETE ANY TABLE TO ${users[i]};
    GRANT CREATE ANY INDEX TO ${users[i]};
+   GRANT COMMENT ANY TABLE TO ${users[i]};
+   GRANT EXECUTE ANY PROCEDURE TO ${users[i]};
+   GRANT CREATE TRIGGER TO ${users[i]};
 EOF
 
   done
